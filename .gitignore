@@ -1,0 +1,18 @@
+# Environment & config
+config/db.php
+
+# XAMPP / server logs
+*.log
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+**/.vscode/
+.idea/
+
+# Flutter (removed from project)
+flutter_app/
