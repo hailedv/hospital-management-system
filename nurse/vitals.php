@@ -1,4 +1,5 @@
 <?php
+// Nurse Vitals - record and submit patient vital signs using shared layout
 require_once '../config/db.php';
 check_login('nurse');
 
