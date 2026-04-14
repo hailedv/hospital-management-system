@@ -1,4 +1,5 @@
 <?php
+// Doctor Dashboard - today's appointments, patient stats, prescriptions, and quick navigation
 require_once '../config/db.php';
 check_login('doctor');
 
