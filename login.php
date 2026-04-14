@@ -1,4 +1,5 @@
 <?php
+// Login page - handles all 8 roles: admin, doctor, nurse, receptionist, pharmacist, accountant, lab_technician, patient
 require_once 'config/db.php';
 
 $error_message = '';
