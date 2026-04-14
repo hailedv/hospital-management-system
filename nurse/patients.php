@@ -1,4 +1,5 @@
 <?php
+// Nurse Patients - view assigned patients and all active patients using shared layout
 require_once '../config/db.php';
 check_login('nurse');
 
