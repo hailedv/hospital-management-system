@@ -1,4 +1,5 @@
 <?php
+// Patient Profile - update personal contact and emergency information using shared layout
 require_once '../config/db.php';
 check_login('patient');
 
