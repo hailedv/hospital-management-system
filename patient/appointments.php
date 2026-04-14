@@ -1,4 +1,5 @@
 <?php
+// Patient Appointments - full appointment history for the logged-in patient using shared layout
 require_once '../config/db.php';
 check_login('patient');
 
