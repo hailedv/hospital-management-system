@@ -5,7 +5,7 @@ check_login('doctor');
 $page_title = 'Doctor Dashboard';
 $role_color = '#28a745';
 $role_class = 'doctor';
-$doctor_id  = $_SESSION['user_id'];
+$doctor_id  = (int)$_SESSION['user_id'];
 
 $stats = [
     'patients'      => (int)$conn->query("SELECT COUNT(DISTINCT patient_id) c FROM appointments WHERE doctor_id=$doctor_id")->fetch_assoc()['c'],

@@ -12,15 +12,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($username) || empty($password) || empty($user_type)) {
         $error_message = "Please fill in all fields.";
     } else {
-        // Define user tables (7 staff actors - patients registered by receptionists)
+        // Define user tables (7 staff actors + patients)
         $tables = [
-            'admin' => 'admins',
-            'doctor' => 'doctors',
-            'nurse' => 'nurses',
-            'receptionist' => 'receptionists',
-            'pharmacist' => 'pharmacists',
-            'accountant' => 'accountants',
-            'lab_technician' => 'lab_technicians'
+            'admin'          => 'admins',
+            'doctor'         => 'doctors',
+            'nurse'          => 'nurses',
+            'receptionist'   => 'receptionists',
+            'pharmacist'     => 'pharmacists',
+            'accountant'     => 'accountants',
+            'lab_technician' => 'lab_technicians',
+            'patient'        => 'patients',
         ];
         
         if (isset($tables[$user_type])) {
@@ -58,6 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             } elseif ($user_type == 'lab_technician') {
                                 $_SESSION['license_number'] = $user['license_number'];
                                 $_SESSION['specialization'] = $user['specialization'];
+                            } elseif ($user_type == 'patient') {
+                                $_SESSION['patient_id']  = $user['patient_id'];
+                                $_SESSION['blood_group'] = $user['blood_group'];
                             }
                             
                             // Log activity
@@ -280,6 +284,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="user-type-card" onclick="selectUserType('lab_technician')">
                         <div class="user-type-icon">🔬</div>
                         <div class="user-type-name">Lab Tech</div>
+                    </div>
+                    <div class="user-type-card" onclick="selectUserType('patient')">
+                        <div class="user-type-icon">👤</div>
+                        <div class="user-type-name">Patient</div>
                     </div>
                 </div>
                 <input type="hidden" name="user_type" id="user_type" required>

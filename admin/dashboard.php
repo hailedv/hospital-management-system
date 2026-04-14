@@ -24,6 +24,16 @@ include '../includes/header.php';
     </div>
 </div>
 
+<nav class="nav-menu">
+    <ul>
+        <li><a href="dashboard.php" class="active">Dashboard</a></li>
+        <li><a href="add_staff.php">Add Staff</a></li>
+        <li><a href="manage_users.php">Manage Users</a></li>
+        <li><a href="view_patients.php">View Patients</a></li>
+        <li><a href="reports.php">Reports</a></li>
+    </ul>
+</nav>
+
 <div class="stats-grid">
     <div class="stat-card">
         <div class="stat-number"><?= $stats['doctors'] ?></div>

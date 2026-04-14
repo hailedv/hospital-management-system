@@ -2,12 +2,120 @@
 require_once '../config/db.php';
 check_login('nurse');
 
-$nurse_id = $_SESSION['user_id'];
+$page_title = 'Record Patient Vitals';
+$role_color = '#e91e63';
+$role_class = 'nurse';
+$nurse_id = (int)$_SESSION['user_id'];
 $message = '';
 $error = '';
 
-// Handle vitals recording
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['record_vitals'])) {
+    $patient_id = isset($_POST['patient_id']) ? (int)$_POST['patient_id'] : 0;
+    $temperature = !empty($_POST['temperature']) ? (float)$_POST['temperature'] : null;
+    $bp_systolic = !empty($_POST['bp_systolic']) ? (int)$_POST['bp_systolic'] : null;
+    $bp_diastolic = !empty($_POST['bp_diastolic']) ? (int)$_POST['bp_diastolic'] : null;
+    $heart_rate = !empty($_POST['heart_rate']) ? (int)$_POST['heart_rate'] : null;
+    $respiratory_rate = !empty($_POST['respiratory_rate']) ? (int)$_POST['respiratory_rate'] : null;
+    $oxygen_saturation = !empty($_POST['oxygen_saturation']) ? (float)$_POST['oxygen_saturation'] : null;
+    $weight = !empty($_POST['weight']) ? (float)$_POST['weight'] : null;
+    $height = !empty($_POST['height']) ? (float)$_POST['height'] : null;
+    $notes = isset($_POST['notes']) ? sanitize_input($_POST['notes']) : '';
+
+    if (empty($patient_id)) {
+        $error = "Please select a patient.";
+    } elseif (is_null($temperature) && is_null($bp_systolic) && is_null($heart_rate) && is_null($respiratory_rate) && is_null($oxygen_saturation) && is_null($weight) && is_null($height)) {
+        $error = "Please enter at least one vital sign measurement.";
+    } else {
+        $stmt = $conn->prepare("INSERT INTO patient_vitals (patient_id, nurse_id, temperature, blood_pressure_systolic, blood_pressure_diastolic, heart_rate, respiratory_rate, oxygen_saturation, weight, height, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("iidiiidddds", $patient_id, $nurse_id, $temperature, $bp_systolic, $bp_diastolic, $heart_rate, $respiratory_rate, $oxygen_saturation, $weight, $height, $notes);
+        if ($stmt->execute()) {
+            $message = "Patient vitals recorded successfully!";
+            log_activity('record_vitals', "Recorded vitals for patient ID $patient_id");
+        } else {
+            $error = "Error recording vitals: " . $conn->error;
+        }
+    }
+}
+
+$patients = $conn->query("SELECT * FROM patients WHERE status = 'active' ORDER BY full_name");
+
+include '../includes/header.php';
+?>
+
+<nav class="nav-menu">
+    <ul>
+        <li><a href="dashboard.php">Dashboard</a></li>
+        <li><a href="patients.php">Patients</a></li>
+        <li><a href="vitals.php" class="active">Vitals</a></li>
+        <li><a href="medications.php">Medications</a></li>
+        <li><a href="patient_notes.php">Nursing Notes</a></li>
+    </ul>
+</nav>
+
+<?php if ($message): ?>
+    <div class="alert alert-success"><?= htmlspecialchars($message) ?></div>
+<?php endif; ?>
+<?php if ($error): ?>
+    <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
+<?php endif; ?>
+
+<div class="table-container" style="padding:0">
+    <h3>📊 Record Vital Signs</h3>
+    <div style="padding:24px">
+        <form method="POST">
+            <div class="form-group">
+                <label>Select Patient:</label>
+                <select name="patient_id" class="form-control" required>
+                    <option value="">Choose a patient</option>
+                    <?php while ($p = $patients->fetch_assoc()): ?>
+                        <option value="<?= $p['id'] ?>"><?= htmlspecialchars($p['patient_id'] . ' - ' . $p['full_name']) ?></option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                <div class="form-group">
+                    <label>Temperature (°C):</label>
+                    <input type="number" name="temperature" class="form-control" step="0.1" placeholder="36.5">
+                </div>
+                <div class="form-group">
+                    <label>Heart Rate (bpm):</label>
+                    <input type="number" name="heart_rate" class="form-control" placeholder="72">
+                </div>
+                <div class="form-group">
+                    <label>BP Systolic:</label>
+                    <input type="number" name="bp_systolic" class="form-control" placeholder="120">
+                </div>
+                <div class="form-group">
+                    <label>BP Diastolic:</label>
+                    <input type="number" name="bp_diastolic" class="form-control" placeholder="80">
+                </div>
+                <div class="form-group">
+                    <label>Respiratory Rate (per min):</label>
+                    <input type="number" name="respiratory_rate" class="form-control" placeholder="16">
+                </div>
+                <div class="form-group">
+                    <label>Oxygen Saturation (%):</label>
+                    <input type="number" name="oxygen_saturation" class="form-control" step="0.1" placeholder="98.5">
+                </div>
+                <div class="form-group">
+                    <label>Weight (kg):</label>
+                    <input type="number" name="weight" class="form-control" step="0.1" placeholder="70.5">
+                </div>
+                <div class="form-group">
+                    <label>Height (cm):</label>
+                    <input type="number" name="height" class="form-control" step="0.1" placeholder="175.0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Notes:</label>
+                <textarea name="notes" class="form-control" rows="3" placeholder="Additional observations"></textarea>
+            </div>
+            <button type="submit" name="record_vitals" class="btn btn-nurse">Record Vitals</button>
+        </form>
+    </div>
+</div>
+
+<?php include '../includes/footer.php'; ?>
     $patient_id = isset($_POST['patient_id']) ? (int)$_POST['patient_id'] : 0;
     $temperature = !empty($_POST['temperature']) ? (float)$_POST['temperature'] : null;
     $bp_systolic = !empty($_POST['bp_systolic']) ? (int)$_POST['bp_systolic'] : null;

@@ -5,7 +5,7 @@ check_login('nurse');
 $page_title = 'Nurse Dashboard';
 $role_color = '#e91e63';
 $role_class = 'nurse';
-$nurse_id   = $_SESSION['user_id'];
+$nurse_id   = (int)$_SESSION['user_id'];
 
 $stats = [
     'patients' => (int)$conn->query("SELECT COUNT(DISTINCT patient_id) c FROM patient_vitals WHERE nurse_id=$nurse_id")->fetch_assoc()['c'],
@@ -34,6 +34,7 @@ include '../includes/header.php';
     <ul>
         <li><a href="dashboard.php" class="active">Dashboard</a></li>
         <li><a href="patients.php">Patients</a></li>
+        <li><a href="vitals.php">Vitals</a></li>
         <li><a href="medications.php">Medications</a></li>
         <li><a href="patient_notes.php">Nursing Notes</a></li>
     </ul>
@@ -52,7 +53,13 @@ include '../includes/header.php';
 
 <div class="features-grid">
     <div class="feature-card">
-        <div class="feature-icon">👥</div>
+        <div class="feature-icon">�</div>
+        <h4>Record Vitals</h4>
+        <p>Record and track patient vital signs.</p>
+        <a href="vitals.php" class="btn btn-nurse">Record Vitals</a>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">�👥</div>
         <h4>Patients</h4>
         <p>View patients assigned to your care.</p>
         <a href="patients.php" class="btn btn-nurse">View Patients</a>
