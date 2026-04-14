@@ -1,4 +1,5 @@
 <?php
+// Patient Bills - view billing history, totals, and outstanding balance using shared layout
 require_once '../config/db.php';
 check_login('patient');
 
