@@ -1,4 +1,5 @@
 <?php
+// Patient Dashboard - appointment stats, upcoming schedule, and quick links using shared layout
 require_once '../config/db.php';
 check_login('patient');
 
