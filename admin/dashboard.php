@@ -1,4 +1,5 @@
 <?php
+// Admin Dashboard - system overview, staff stats, and navigation menu
 require_once '../config/db.php';
 check_login('admin');
 
