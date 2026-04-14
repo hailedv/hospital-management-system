@@ -1,4 +1,5 @@
 <?php
+// Nurse Medications - view dispensed prescriptions and record administration using shared layout
 require_once '../config/db.php';
 check_login('nurse');
 
