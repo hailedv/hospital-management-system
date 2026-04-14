@@ -1,4 +1,5 @@
 <?php
+// Nurse Dashboard - vitals summary, patient count, and navigation to all nurse modules
 require_once '../config/db.php';
 check_login('nurse');
 
