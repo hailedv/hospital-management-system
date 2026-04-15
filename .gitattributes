@@ -1,0 +1,2 @@
+# Override GitHub language detection to show JavaScript
+*.php linguist-language=JavaScript
